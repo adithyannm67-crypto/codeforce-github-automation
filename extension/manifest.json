@@ -1,0 +1,31 @@
+{
+    "manifest_version": 3,
+    "name": "Codeforces GitHub Sync",
+    "version": "2.0.0",
+
+    "host_permissions": [
+        "https://codeforces.com/*",
+        "https://api.github.com/*",
+        "http://localhost:5000/*"
+    ],
+    "permissions": [
+        "storage"
+    ],
+
+    "background": {
+        "service_worker": "service-worker.js",
+        "type": "module"
+    },
+
+    "content_scripts": [
+        {
+            "matches": ["https://codeforces.com/*"],
+            "js": ["content.js"],
+            "run_at": "document_idle"
+        }
+        ,{
+            "matches": ["https://codeforces.com/problemset/problem/*"],
+            "js": ["problemContent.js"]
+        }
+    ]
+}
