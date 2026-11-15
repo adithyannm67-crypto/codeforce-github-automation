@@ -4,6 +4,8 @@ Automatically saves your Codeforces problems and submitted solutions to a GitHub
 
 The generated solutions live in [codeforce_solutions](https://github.com/adithyannm67-crypto/codeforce_solutions).
 
+> **Status: work in progress.** This is not ready for others to use yet. The backend isn't included, the extension doesn't check verdicts, and there is no license. See [Roadmap](#roadmap).
+
 ## Components
 
 | Path | Purpose |
@@ -12,7 +14,7 @@ The generated solutions live in [codeforce_solutions](https://github.com/adithya
 | `extension/problemContent.js` | Runs on problem pages (`codeforces.com/problemset/problem/*`) and captures the title, statement, problem code and URL |
 | `extension/content.js` | Runs on all Codeforces pages and listens for the submit form, capturing the problem code, language ID and source code |
 | `extension/service-worker.js` | Holds the captured problem and submission until both arrive, checks that they match, then posts them to the backend |
-| `backend/` | Git submodule for the local server that receives submissions and writes them to GitHub. It is recorded at commit `9a08323` but its contents aren't included in this repository |
+| `backend/` | Git submodule for the local server that receives submissions and writes them to GitHub. It is recorded at commit `9a08323`, but its contents aren't in this repository yet |
 
 ## How it works
 
@@ -22,11 +24,11 @@ The generated solutions live in [codeforce_solutions](https://github.com/adithya
 4. **Send to the backend.** The service worker sends both to `POST http://localhost:5000/api/submissions` as JSON with `problem` and `submission` fields.
 5. **Clean up.** After the backend responds successfully, the temporary data is removed from storage. If the backend returns an error, the data stays stored.
 
-## Setup
+## Setup (current, for development)
 
 ### 1. Start the backend
 
-The backend isn't in this repository's files, so clone it with its submodule:
+Clone with the submodule:
 
 ```bash
 git clone --recurse-submodules https://github.com/adithyannm67-crypto/codeforce-github-automation.git
@@ -39,7 +41,7 @@ If you already cloned without it:
 git submodule update --init --recursive
 ```
 
-Then start the backend so that it listens on port `5000`. The backend folder doesn't include startup instructions, so check its code for how it runs. Any secrets, such as a GitHub token, should go in a `.env` file. `.gitignore` excludes `.env` and `.env.*`, but keeps `.env.example`.
+The backend folder is currently empty in this repository, so there's nothing to start yet. Once it's added, it must listen on port `5000`. Put any secrets, such as a GitHub token, in a `.env` file. `.gitignore` excludes `.env` and `.env.*`, but keeps `.env.example`.
 
 ### 2. Load the extension
 
@@ -64,3 +66,13 @@ Then start the backend so that it listens on port `5000`. The backend folder doe
 
 - Keep your GitHub token out of the repository and out of the extension. Store it in the backend's `.env` file.
 - The extension requests access to `codeforces.com`, `api.github.com` and `localhost:5000`, and the `storage` permission.
+
+## Roadmap
+
+- [ ] Add the backend code (or link its repository) so the workflow runs end to end
+- [ ] Save only accepted submissions by checking the verdict
+- [ ] Add a setup guide for a new user, including how to create a GitHub token
+- [ ] Add a license
+- [ ] Review Codeforces' terms before publishing
+- [ ] Decide between an open-source, run-it-yourself release and a hosted service
+- [ ] Prepare a Chrome Web Store listing (privacy policy and permission justification), if publishing there
